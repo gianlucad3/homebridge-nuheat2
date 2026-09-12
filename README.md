@@ -20,9 +20,9 @@ This maintained fork modernizes Nuheat support for current Homebridge releases w
 ## Compatibility
 
 - Homebridge: `^1.8.0 || ^2.0.0-beta.0`
-- Node.js: `^18.20.4 || ^20.18.0 || ^22 || ^24`
+- Node.js: `^18.20.4 || ^20.18.0 || ^22 || ^24 || ^26`
 
-For current Homebridge 2.0 betas, use Node 22 or 24.
+For current Homebridge releases, use Node 22, 24, or 26.
 
 ## Installation
 

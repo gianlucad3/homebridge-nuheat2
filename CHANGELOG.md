@@ -4,6 +4,17 @@ All notable changes to this project should be documented in this file
 
 ## [Unreleased]
 
+## [1.2.26] - 2026-07-09
+
+### Fixed
+
+- Declare Node.js 26 as a supported runtime so Homebridge no longer reports the plugin as incompatible with Node v26
+
+### Changed
+
+- Add Node 26 to the CI test matrix
+- Update `@types/node` to the Node 26 type definitions
+
 ## [1.2.25] - 2026-07-09
 
 ### Fixed
