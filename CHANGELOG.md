@@ -4,6 +4,12 @@ All notable changes to this project should be documented in this file
 
 ## [Unreleased]
 
+## [1.2.27] - 2026-09-14
+
+### Changed
+
+- Use `engines.homebridge` value `>=1.8.0 <3.0.0-0` so every Homebridge 1.x and 2.x release, including prereleases, is satisfied without a `peerDependencies.homebridge` entry
+
 ## [1.2.26] - 2026-07-09
 
 ### Fixed
