@@ -247,7 +247,15 @@ class NuHeatAPI {
     if (holdSetPointDateTime) {
       callBody.holdSetPointDateTime = holdSetPointDateTime;
     }
-    this.log.info(JSON.stringify(callBody));
+    this.log.debug(
+      "NuHeatAPI: Setting thermostat " +
+        serialNumber +
+        " to " +
+        setPointTemp +
+        " with schedule mode " +
+        scheduleMode +
+        ".",
+    );
     const callOptions: FetchOptions = {
       body: JSON.stringify(callBody),
       method: "PUT",

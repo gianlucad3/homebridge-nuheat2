@@ -257,6 +257,36 @@ test("OAuth login posts the Nuheat identity login form fields", async () => {
   assert.equal(postedForm.get("ReturnUrl"), "/connect/authorize/callback");
 });
 
+test("setHeatSetpoint does not log the raw thermostat payload at info level", async () => {
+  const messages: string[] = [];
+  const log = {
+    info(message: string) {
+      messages.push(message);
+    },
+    debug() {},
+    error() {},
+    warn() {},
+  };
+  const api = new NuHeatAPI("user@example.com", "password", log as any);
+  api.refreshAccessToken = async () => true;
+  api.fetch = async () =>
+    createResponse({
+      status: 204,
+      url: "https://api.nam.mynuheat.com/api/v1/Thermostat",
+    });
+
+  await api.setHeatSetpoint("123456789", 20, 1440);
+
+  assert.equal(
+    messages.some((message) => message.includes("serialNumber")),
+    false,
+  );
+  assert.equal(
+    messages.some((message) => message.includes("scheduleMode")),
+    false,
+  );
+});
+
 test("OAuth consent follows Nuheat HTML browser redirects with consent cookies", async () => {
   const api = new NuHeatAPI("user@example.com", "password", createLogStub());
   const authResponse = createResponse({

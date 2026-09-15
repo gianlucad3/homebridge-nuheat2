@@ -79,7 +79,7 @@ The equivalent JSON looks like this:
 - `devices`: Optional list of thermostats to expose. If omitted or empty, every thermostat on the account will be discovered automatically. Blank rows in the UI are ignored
 - `serialNumber`: Thermostat serial number from MyNuheat
 - `disabled`: Available on `devices` and `groups` rows. Keeps the row saved while preventing that thermostat or group from being exposed
-- `autoPopulateAwayModeSwitches`: Automatically expose away-mode switches for all groups on the account
+- `autoPopulateAwayModeSwitches`: Automatically expose away-mode switches for all groups on the account. Away mode is applied by Nuheat's servers; affected thermostats may be reported as being in Standby rather than Away
 - `exposeScheduleSwitches`: Optionally expose a switch per thermostat that reflects whether the thermostat is following its schedule and can be turned on to resume the schedule
 - `groups`: Optional allow-list of groups to expose as away-mode switches. This only affects group/away-mode accessories. Blank rows in the UI are ignored
 - `groupName`: Group name as shown in MyNuheat
@@ -93,6 +93,14 @@ The equivalent JSON looks like this:
 - `0`: hold until the next scheduled event
 - `1-1439`: timed hold for the configured number of minutes
 - `1440`: permanent hold
+
+### Away Mode Behavior
+
+Away-mode switches map directly to Nuheat's group away mode. Turning a switch on sends `PUT /api/v1/Group` with `{ groupId, awayMode: true }`, which is the only group-level control Nuheat exposes.
+
+What the thermostats do while a group is in away mode is decided by Nuheat's servers, not by this plugin. Depending on the account and firmware, Nuheat may report the affected thermostats as being in **Standby** rather than showing an explicit "Away" state. Standby is Nuheat's own representation of the away setpoint; the plugin does not request standby and cannot request it, because Nuheat's thermostat update API has no operating-mode field.
+
+If you need a specific temperature held while you are away, set that temperature on the thermostat itself. The plugin will hold it for `holdLength` minutes, or permanently when `holdLength` is `1440`.
 
 ### Device Discovery
 
@@ -151,5 +159,4 @@ This project is maintained by `applemanj` and retains attribution to SenorShaun 
 ## Future Work
 
 - Validate the PKCE public-client flow against more real-world Nuheat accounts.
-- Verify group and away-mode behavior against current live API responses.
 - Monitor Nuheat Conductor v2 notification behavior across more accounts and keep polling as the reliability fallback.

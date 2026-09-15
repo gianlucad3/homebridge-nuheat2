@@ -65,7 +65,7 @@
         "title": "Away Mode Group Allow-List",
         "type": "array",
         "default": [],
-        "description": "Optional. Leave empty unless you want specific Nuheat groups exposed as away-mode switches.",
+        "description": "Optional. Leave empty unless you want specific Nuheat groups exposed as away-mode switches. Away mode is applied by Nuheat's servers; affected thermostats may be reported as being in Standby rather than Away.",
         "items": {
           "type": "object",
           "properties": {
@@ -87,7 +87,7 @@
         "title": "Expose Away Mode Switches For All Groups",
         "type": "boolean",
         "default": false,
-        "description": "Automatically create HomeKit away-mode switches for every Nuheat group on the account."
+        "description": "Automatically create HomeKit away-mode switches for every Nuheat group on the account. Away mode is applied by Nuheat's servers; affected thermostats may be reported as being in Standby rather than Away."
       },
       "exposeScheduleSwitches": {
         "title": "Expose Schedule Switches",

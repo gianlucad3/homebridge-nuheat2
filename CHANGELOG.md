@@ -4,6 +4,16 @@ All notable changes to this project should be documented in this file
 
 ## [Unreleased]
 
+## [1.2.28] - 2026-09-14
+
+### Fixed
+
+- Stop logging the raw thermostat update payload at info level on every setpoint change; the payload is now summarized at debug level
+
+### Changed
+
+- Document that group away mode is applied by Nuheat's servers and that affected thermostats may be reported as being in Standby rather than Away
+
 ## [1.2.27] - 2026-09-14
 
 ### Changed
