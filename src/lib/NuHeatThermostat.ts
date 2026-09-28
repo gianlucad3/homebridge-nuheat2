@@ -94,9 +94,10 @@ class NuHeatThermostat {
       this.deviceData.name,
     );
 
+    const heatSetPoint = this.toNuHeatTemperature(MIN_TARGET_TEMPERATURE_C);
     const response = await this.NuHeatAPI.setHeatSetpoint(
       this.deviceData.serialNumber ?? "",
-      this.toNuHeatTemperature(MIN_TARGET_TEMPERATURE_C),
+      heatSetPoint,
       this.holdLength,
     );
 
@@ -109,7 +110,7 @@ class NuHeatThermostat {
       return;
     }
 
-    this.updateValues(response);
+    this.applySetpointResponse(response, heatSetPoint);
     callback(null);
   }
 
@@ -136,9 +137,23 @@ class NuHeatThermostat {
       this.log.error("Error setting target temperature", this.deviceData.name);
       callback(new Error("Error: setTargetTemperature"));
     } else {
-      this.updateValues(response);
+      this.applySetpointResponse(response, heatSetPoint);
       callback(null);
     }
+  }
+
+  // NuHeat answers a successful setpoint PUT with 204 No Content, which
+  // makeAPICall returns as `true` rather than thermostat data. In that case,
+  // keep the existing thermostat data with the new setpoint applied.
+  private applySetpointResponse(
+    response: AccessoryThermostat | true,
+    heatSetPoint: string,
+  ): void {
+    this.updateValues(
+      response === true
+        ? { ...this.deviceData, setPointTemp: Number(heatSetPoint) }
+        : response,
+    );
   }
 
   async updateAccessory(): Promise<void> {

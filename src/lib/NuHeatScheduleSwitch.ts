@@ -72,7 +72,13 @@ class NuHeatScheduleSwitch {
       return;
     }
 
-    this.updateValues(response);
+    // A 204 No Content reply comes back as `true`; keep the existing
+    // thermostat data and mark the schedule as resumed.
+    this.updateValues(
+      response === true
+        ? { ...this.deviceData, scheduleMode: SCHEDULE_MODE.AUTO }
+        : response,
+    );
     callback(null);
   }
 

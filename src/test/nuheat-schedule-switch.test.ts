@@ -69,3 +69,34 @@ test("schedule switch resumes schedule when turned on", async () => {
   assert.equal(calledWith, "123");
   assert.equal(value, true);
 });
+
+test("a 204 resume-schedule response keeps the existing thermostat data", async () => {
+  const { accessory, homebridge, Characteristic } = createSwitchHomebridgeStub();
+  const scheduleSwitch = new NuHeatScheduleSwitch(
+    createLogStub(),
+    { serialNumber: "123", name: "Bathroom", scheduleMode: SCHEDULE_MODE.HOLD },
+    accessory,
+    // makeAPICall returns `true` for a 204 No Content reply
+    { resumeSchedule: async () => true } as any,
+    homebridge,
+  );
+
+  await new Promise<void>((resolve, reject) => {
+    scheduleSwitch.setScheduleEnabled(true, (error) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+
+      resolve();
+    });
+  });
+
+  const value = accessory
+    .getService(homebridge.hap.Service.Switch)
+    .getCharacteristic(Characteristic.On).value;
+
+  assert.equal(value, true);
+  assert.equal(scheduleSwitch.deviceData.serialNumber, "123");
+  assert.equal(scheduleSwitch.deviceData.scheduleMode, SCHEDULE_MODE.AUTO);
+});

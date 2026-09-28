@@ -4,6 +4,10 @@ All notable changes to this project should be documented in this file
 
 ## [Unreleased]
 
+### Fixed
+
+- Stop replacing thermostat data with `true` when Nuheat answers a setpoint or resume-schedule change with 204 No Content, which briefly showed about 0 C in HomeKit, reset the setpoint to 10 C and lost the serial number used by later changes
+
 ## [1.2.28] - 2026-09-14
 
 ### Fixed
